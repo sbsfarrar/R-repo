@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Import and Summarize</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Import and Summarize</h1>
+
+
+
+<p>The following is a simple workflow for the importing and summarizing
+of a data set. The tidyproteomics data object has a defined
+<code>print()</code> function that will summarized the data contents,
+while the <code>summary()</code> function will provide a statistical
+summary of the quantitative data with values as described in Table
+1.</p>
+<p><em>Table 1 - summary table description</em></p>
+<table>
+<thead>
+<tr class="header">
+<th>Colunm</th>
+<th>Accounting</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>first</em></td>
+<td>group (eg sample name)</td>
+</tr>
+<tr class="even">
+<td>files</td>
+<td><em>integer</em> number present in group</td>
+</tr>
+<tr class="odd">
+<td>proteins</td>
+<td><em>integer</em> number present in group</td>
+</tr>
+<tr class="even">
+<td>protein_groups</td>
+<td><em>integer</em> number present in group</td>
+</tr>
+<tr class="odd">
+<td>peptides</td>
+<td><em>integer</em> number present in group</td>
+</tr>
+<tr class="even">
+<td>peptides_unique</td>
+<td><em>integer</em> number present in group</td>
+</tr>
+<tr class="odd">
+<td>quantifiable</td>
+<td><em>percent</em> ratio of non-zero values</td>
+</tr>
+<tr class="even">
+<td>CVs</td>
+<td><em>ratio</em> quantitative abundance (sd/mean)</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt; Warning: package &#39;dplyr&#39; was built under R version 4.2.3</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;tidyproteomics&quot;</span>)</span></code></pre></div>
+<div id="importing-data" class="section level3">
+<h3>Importing Data</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># path_to_package_data() loads data specific to this package</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># for your project load local data</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co"># example: </span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co"># your_proteins &lt;- &quot;./data/your_exported_results.xlsx&quot; %&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#   import(&quot;ProteomeDiscoverer&quot;, &quot;proteins&quot;)</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>hela_proteins <span class="ot">&lt;-</span> <span class="fu">path_to_package_data</span>(<span class="st">&quot;p97KD_HCT116&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="fu">import</span>(<span class="st">&quot;ProteomeDiscoverer&quot;</span>, <span class="st">&quot;proteins&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="co"># change the sample labels</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="fu">reassign</span>(<span class="st">&#39;sample&#39;</span>, <span class="st">&#39;ctl&#39;</span>, <span class="st">&#39;control&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="fu">reassign</span>(<span class="st">&#39;sample&#39;</span>, <span class="st">&#39;p97&#39;</span>, <span class="st">&#39;knockdown&#39;</span>)</span></code></pre></div>
+<div id="print-data-contents" class="section level4">
+<h4>Print Data Contents</h4>
+<p>Printing the imported data object, or simply exposing the object will
+show a summary of the data object contents</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>hela_proteins</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; ── Quantitative Proteomics Data Object ──</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; Origin          ProteomeDiscoverer </span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;                 proteins (10.67 MB) </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; Composition     6 files </span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;                 2 samples (control, knockdown) </span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Quantitation    7055 proteins </span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt;                 4 log10 dynamic range </span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt;                 28.8% missing values </span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;  *imputed        </span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; Accounting      (4) num_peptides num_psms num_unique_peptides imputed </span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; Annotations     (9) description biological_process cellular_component molecular_function</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt;                 gene_id_entrez gene_name wiki_pathway reactome_pathway</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt;                 gene_id_ensemble </span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; </span></span></code></pre></div>
+<p>As more operations are performed on the data, more of the contents
+are summarized</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>hela_proteins <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">expression</span>(knockdown<span class="sc">/</span>control) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="fu">enrichment</span>(knockdown<span class="sc">/</span>control, <span class="at">.term =</span> <span class="st">&#39;biological_process&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="fu">enrichment</span>(knockdown<span class="sc">/</span>control, <span class="at">.term =</span> <span class="st">&#39;molecular_function&#39;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>ℹ .. expression<span class="sc">::</span>t_test testing knockdown <span class="sc">/</span> control</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>✔ .. expression<span class="sc">::</span>t_test testing knockdown <span class="sc">/</span> control [<span class="fl">8.1</span>s]</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>ℹ .. enrichment<span class="sc">::</span>gsea testing knockdown <span class="sc">/</span> control by term biological_process</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a></span>
+<span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-42"><a href="#cb4-42" tabindex="-1"></a></span>
+<span id="cb4-43"><a href="#cb4-43" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-44"><a href="#cb4-44" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-45"><a href="#cb4-45" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-46"><a href="#cb4-46" tabindex="-1"></a></span>
+<span id="cb4-47"><a href="#cb4-47" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-48"><a href="#cb4-48" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-49"><a href="#cb4-49" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-50"><a href="#cb4-50" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-52"><a href="#cb4-52" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-53"><a href="#cb4-53" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-54"><a href="#cb4-54" tabindex="-1"></a></span>
+<span id="cb4-55"><a href="#cb4-55" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-56"><a href="#cb4-56" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-57"><a href="#cb4-57" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-58"><a href="#cb4-58" tabindex="-1"></a></span>
+<span id="cb4-59"><a href="#cb4-59" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-60"><a href="#cb4-60" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-61"><a href="#cb4-61" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-62"><a href="#cb4-62" tabindex="-1"></a></span>
+<span id="cb4-63"><a href="#cb4-63" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-64"><a href="#cb4-64" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-65"><a href="#cb4-65" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-66"><a href="#cb4-66" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-67"><a href="#cb4-67" tabindex="-1"></a>✔ .. enrichment<span class="sc">::</span>gsea testing knockdown <span class="sc">/</span> control by term biological_process [1…</span>
+<span id="cb4-68"><a href="#cb4-68" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-69"><a href="#cb4-69" tabindex="-1"></a>ℹ .. enrichment<span class="sc">::</span>gsea testing knockdown <span class="sc">/</span> control by term molecular_function</span>
+<span id="cb4-70"><a href="#cb4-70" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-71"><a href="#cb4-71" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-72"><a href="#cb4-72" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-73"><a href="#cb4-73" tabindex="-1"></a></span>
+<span id="cb4-74"><a href="#cb4-74" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-75"><a href="#cb4-75" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-76"><a href="#cb4-76" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-77"><a href="#cb4-77" tabindex="-1"></a></span>
+<span id="cb4-78"><a href="#cb4-78" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-79"><a href="#cb4-79" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-80"><a href="#cb4-80" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-81"><a href="#cb4-81" tabindex="-1"></a></span>
+<span id="cb4-82"><a href="#cb4-82" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-83"><a href="#cb4-83" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-84"><a href="#cb4-84" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-85"><a href="#cb4-85" tabindex="-1"></a></span>
+<span id="cb4-86"><a href="#cb4-86" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-87"><a href="#cb4-87" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-88"><a href="#cb4-88" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-89"><a href="#cb4-89" tabindex="-1"></a></span>
+<span id="cb4-90"><a href="#cb4-90" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-91"><a href="#cb4-91" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-92"><a href="#cb4-92" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-93"><a href="#cb4-93" tabindex="-1"></a></span>
+<span id="cb4-94"><a href="#cb4-94" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-95"><a href="#cb4-95" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-96"><a href="#cb4-96" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-97"><a href="#cb4-97" tabindex="-1"></a></span>
+<span id="cb4-98"><a href="#cb4-98" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-99"><a href="#cb4-99" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-100"><a href="#cb4-100" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-101"><a href="#cb4-101" tabindex="-1"></a></span>
+<span id="cb4-102"><a href="#cb4-102" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-103"><a href="#cb4-103" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-104"><a href="#cb4-104" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-105"><a href="#cb4-105" tabindex="-1"></a></span>
+<span id="cb4-106"><a href="#cb4-106" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-107"><a href="#cb4-107" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-108"><a href="#cb4-108" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-109"><a href="#cb4-109" tabindex="-1"></a></span>
+<span id="cb4-110"><a href="#cb4-110" tabindex="-1"></a><span class="co">#&gt; Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize,</span></span>
+<span id="cb4-111"><a href="#cb4-111" tabindex="-1"></a><span class="co">#&gt; gseaParam, : All values in the stats vector are greater than zero and scoreType</span></span>
+<span id="cb4-112"><a href="#cb4-112" tabindex="-1"></a><span class="co">#&gt; is &quot;std&quot;, maybe you should switch to scoreType = &quot;pos&quot;.</span></span>
+<span id="cb4-113"><a href="#cb4-113" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-114"><a href="#cb4-114" tabindex="-1"></a>✔ .. enrichment<span class="sc">::</span>gsea testing knockdown <span class="sc">/</span> control by term molecular_function [4…</span>
+<span id="cb4-115"><a href="#cb4-115" tabindex="-1"></a><span class="co">#&gt; ── Quantitative Proteomics Data Object ──</span></span>
+<span id="cb4-116"><a href="#cb4-116" tabindex="-1"></a><span class="co">#&gt; Origin          ProteomeDiscoverer </span></span>
+<span id="cb4-117"><a href="#cb4-117" tabindex="-1"></a><span class="co">#&gt;                 proteins (11.32 MB) </span></span>
+<span id="cb4-118"><a href="#cb4-118" tabindex="-1"></a><span class="co">#&gt; Composition     6 files </span></span>
+<span id="cb4-119"><a href="#cb4-119" tabindex="-1"></a><span class="co">#&gt;                 2 samples (control, knockdown) </span></span>
+<span id="cb4-120"><a href="#cb4-120" tabindex="-1"></a><span class="co">#&gt; Quantitation    7055 proteins </span></span>
+<span id="cb4-121"><a href="#cb4-121" tabindex="-1"></a><span class="co">#&gt;                 4 log10 dynamic range </span></span>
+<span id="cb4-122"><a href="#cb4-122" tabindex="-1"></a><span class="co">#&gt;                 28.8% missing values </span></span>
+<span id="cb4-123"><a href="#cb4-123" tabindex="-1"></a><span class="co">#&gt;  *imputed        </span></span>
+<span id="cb4-124"><a href="#cb4-124" tabindex="-1"></a><span class="co">#&gt; Accounting      (4) num_peptides num_psms num_unique_peptides imputed </span></span>
+<span id="cb4-125"><a href="#cb4-125" tabindex="-1"></a><span class="co">#&gt; Annotations     (9) description biological_process cellular_component molecular_function</span></span>
+<span id="cb4-126"><a href="#cb4-126" tabindex="-1"></a><span class="co">#&gt;                 gene_id_entrez gene_name wiki_pathway reactome_pathway</span></span>
+<span id="cb4-127"><a href="#cb4-127" tabindex="-1"></a><span class="co">#&gt;                 gene_id_ensemble </span></span>
+<span id="cb4-128"><a href="#cb4-128" tabindex="-1"></a><span class="co">#&gt; Analyses        (1) </span></span>
+<span id="cb4-129"><a href="#cb4-129" tabindex="-1"></a><span class="co">#&gt;                 knockdown/control -&gt; expression &amp; enrichment (biological_process, molecular_function) </span></span>
+<span id="cb4-130"><a href="#cb4-130" tabindex="-1"></a><span class="co">#&gt; </span></span></code></pre></div>
+</div>
+<div id="summarize-quantitative-data" class="section level4">
+<h4>Summarize Quantitative Data</h4>
+<p>Use the explicit <code>summary()</code> function summarize the data,
+in this case globally.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>hela_proteins <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; ── Summary: global ──</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;  proteins peptides peptides_unique quantifiable  CVs</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt;      7055    66329           58706        0.908 0.25</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; </span></span></code></pre></div>
+<p>Here is a summary by unique sample names</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>hela_proteins <span class="sc">%&gt;%</span> <span class="fu">summary</span>(<span class="at">by =</span> <span class="st">&#39;sample&#39;</span>) </span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; ── Summary: sample ──</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;     sample proteins peptides peptides_unique quantifiable  CVs</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;    control     7055    66329           58706        0.908 0.16</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;  knockdown     7055    66329           58706        0.909 0.21</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; </span></span></code></pre></div>
+<p>A summary that includes contamination where the description is
+contains ‘CRAP’, as in the crap-ome</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>hela_proteins <span class="sc">%&gt;%</span> <span class="fu">summary</span>(<span class="at">contamination =</span> <span class="st">&#39;CRAP&#39;</span>) </span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; ── Summary: contamination ──</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;     sample replicate native   BSA Keratin    Other Trypsin sample_id</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;    control         1  92.7% 3.66%   3.56%  0.0023%    0.1%  9e6ed3ba</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;    control         2    92% 4.02%   3.89% 0.00205%  0.123%  cc56fc1d</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt;    control         3    92% 4.01%    3.9% 0.00208%  0.113%  6a21f7a9</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;  knockdown         1    92% 4.01%   3.88% 0.00183%  0.125%  966be57f</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;  knockdown         2  92.7% 3.66%   3.59%  0.0023% 0.0648%  79a98e41</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt;  knockdown         3  92.2% 3.89%   3.82% 0.00232% 0.0679%  9f804505</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;                 import_file sample_file</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;  p97KD_HCT116_proteins.xlsx          F1</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt;  p97KD_HCT116_proteins.xlsx          F4</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt;  p97KD_HCT116_proteins.xlsx          F5</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt;  p97KD_HCT116_proteins.xlsx          F2</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt;  p97KD_HCT116_proteins.xlsx          F3</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt;  p97KD_HCT116_proteins.xlsx          F6</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; </span></span></code></pre></div>
+<p>A summary for contamination where we specify where the description is
+contains ‘ribosome’</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>hela_proteins <span class="sc">%&gt;%</span> <span class="fu">summary</span>(<span class="at">contamination =</span> <span class="st">&quot;ribosome&quot;</span>) </span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; ── Summary: contamination ──</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt;     sample replicate native ribosome sample_id                import_file</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt;    control         1  99.8%   0.155%  9e6ed3ba p97KD_HCT116_proteins.xlsx</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt;    control         2  99.8%    0.15%  cc56fc1d p97KD_HCT116_proteins.xlsx</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt;    control         3  99.8%   0.156%  6a21f7a9 p97KD_HCT116_proteins.xlsx</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt;  knockdown         1  99.8%   0.171%  966be57f p97KD_HCT116_proteins.xlsx</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt;  knockdown         2  99.8%   0.166%  79a98e41 p97KD_HCT116_proteins.xlsx</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt;  knockdown         3  99.8%   0.164%  9f804505 p97KD_HCT116_proteins.xlsx</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt;  sample_file</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt;           F1</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt;           F4</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt;           F5</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt;           F2</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt;           F3</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt;           F6</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; </span></span></code></pre></div>
+<p>A summary based on a term set in the provided annotations</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>hela_proteins <span class="sc">%&gt;%</span> <span class="fu">summary</span>(<span class="st">&#39;biological_process&#39;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; ── Summary: biological_process ──</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt;                biological_process proteins peptides peptides_unique</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt;                cell communication        9      100              93</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt;                        cell death        1        3               1</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt;              cell differentiation        3        9               9</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt;                       cell growth      104     1419             839</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt;  cell organization and biogenesis       17      241             241</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt;                cell proliferation     7055    66329           58706</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt;       cellular component movement        6       13              11</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt;              cellular homeostasis      324     2854            2631</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt;                       coagulation        9       68              58</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt;                       conjugation      181     1460            1240</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt;                  defense response       15       83              76</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt;                       development       38      180             164</span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt;                 metabolic process      342     2804            2422</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">#&gt;  quantifiable   CVs</span></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&gt;         0.920 0.200</span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="co">#&gt;         1.000 0.340</span></span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&gt;         0.389 0.305</span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="co">#&gt;         0.803 0.280</span></span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&gt;         0.967 0.210</span></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a><span class="co">#&gt;         0.908 0.250</span></span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a><span class="co">#&gt;         0.679 0.410</span></span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a><span class="co">#&gt;         0.938 0.260</span></span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a><span class="co">#&gt;         0.885 0.220</span></span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a><span class="co">#&gt;         0.893 0.260</span></span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a><span class="co">#&gt;         0.709 0.275</span></span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a><span class="co">#&gt;         0.730 0.245</span></span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a><span class="co">#&gt;         0.886 0.250</span></span>
+<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a><span class="co">#&gt; </span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
