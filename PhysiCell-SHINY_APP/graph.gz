@@ -1,0 +1,48 @@
+digraph finite_state_machine {
+    #splines=ortho
+    #root=Pyruvate
+    #ENGINE:FDP
+    K=2
+    maxiter=500000
+    start=25
+    node[fontsize=20, penwidth=2,
+ width=1.2, height=0.5, fixedsize="false"]
+     edge[arrowsize=1.6,  
+         sametail=true,
+         labelfontsize=20,
+         fontsize=8,
+         penwidth=2,
+         fontname="sans-serif"]
+
+Gluout -> Gluin [penwidth=1, id="GluT1", dir=both,color=blue]
+Gluin -> G6P [penwidth=1, id="HK", dir=both,color=blue]
+G6P -> F6P [penwidth=1, id="GPI", dir=both,color=blue]
+F6P -> FBP [penwidth=1, id="PFK1", dir=both,color=blue]
+FBP -> DHAP [penwidth=1, id="ALD", dir=both,color=blue]
+FBP -> G3P [penwidth=1, id="ALD2", dir=both,color=blue]
+DHAP -> G3P [penwidth=1, id="TPI", dir=both,color=blue]
+G3P -> "1,3BPG" [penwidth=1, id="GAPDH", dir=both,color=blue]
+"1,3BPG"-> "3PG" [penwidth=1, id="PGK", dir=both,color=blue]
+"3PG" -> "2PG" [penwidth=1, id="PGAM", dir=both,color=blue]
+"2PG" -> PEP [penwidth=1, id="ENO", dir=both,color=blue]
+PEP -> Pyruvate [penwidth=1, id="PKM2", dir=both,color=blue]
+Pyruvate -> Lactate [penwidth=1, id="LDH", dir=both,color=blue]
+G6P -> R5P [penwidth=1, id="G6PD", dir=both,color=blue]
+ATP -> ADP [penwidth=1, id="ATPases", dir=both,color=blue]
+AMP -> "ADP" [penwidth=1, id="AK", dir=both,color=blue]
+F6P -> "F2,6BP" [penwidth=1, id="PFKFB", dir=both,color=blue]
+"3PG" -> Serine [penwidth=1, id="PHGDH", dir=both,color=blue]
+Pyruvate -> Citrate [penwidth=1, id="PDH", dir=both,color=blue]
+Pyruvate -> Complex2 [penwidth=1, id="PDH2", dir=both,color=blue]
+Complex2 -> "mal-CoA" [penwidth=1, id="ACC", dir=both,color=blue]
+ROS -> Null1 [penwidth=1, id="SOD", dir=both,color=blue]
+Lactate -> LactateE [penwidth=1, id="SOD2", dir=both,color=blue]
+"R5P" -> "F6P" [penwidth=1, id="SOD3", dir=both,color=blue]
+R5P -> Null2 [penwidth=1, id="NUCLEOTIDEBIOSYNTHESIS", dir=both,color=blue]
+Serine -> Null [penwidth=1, id="SERINECONSUMPTION", dir=both,color=blue]
+Citrate -> Complex2 [penwidth=1, id="GPDH", dir=both,color=blue]
+Complex2 -> ATP [penwidth=1, id="GPDH2", dir=both,color=blue]
+Complex2 -> ROS [penwidth=1, id="GPDH3", dir=both,color=blue]
+Null3 -> ROS [penwidth=1, id="NOX", dir=both,color=blue]
+Citrate -> Null4 [penwidth=1, id="NOX2", dir=both,color=blue]
+}
